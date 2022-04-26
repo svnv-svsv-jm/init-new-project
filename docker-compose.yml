@@ -1,0 +1,32 @@
+version: "3.8"
+
+services:
+
+  notebook:
+    image: ${PROJECT_NAME:-test}:latest
+    container_name: ${PROJECT_NAME:-test}-notebook
+    command: "jupyter notebook --ip=0.0.0.0 --port=8888 --no-browser --allow-root --NotebookApp.token='' --NotebookApp.password=''"
+    ports: #server:container
+      - "${PORTJUPY-8888}:8888"
+    volumes:
+      - ./:/src
+    environment:
+      - NVIDIA_VISIBLE_DEVICES=all
+    # runtime: nvidia
+    deploy:
+      resources:
+        reservations:
+          memory: 16Gb
+          # devices:
+          #   - driver: nvidia
+          #     capabilities: [gpu, utility]
+          #     device_ids: ['0']
+
+  tensorboard:
+    image: ${PROJECT_NAME:-test}:latest
+    container_name: ${PROJECT_NAME:-test}-tensorboard
+    command: "tensorboard --logdir=${TB-tensorboard} --port=6006 --host 0.0.0.0"
+    ports:
+      - "${PORTTB-6006}:6006" #server:container
+    volumes:
+      - ./:/src

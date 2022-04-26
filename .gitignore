@@ -1,0 +1,15 @@
+.venv
+
+checkpoints/*
+tensorboard/*
+logs/*
+*_cache
+*.egg-info
+.vscode
+
+# Garbage
+.Trash-0
+
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
