@@ -39,6 +39,7 @@ which:
 	pyenv which python
 	pyenv version python
 
+# --- docker ---
 # build project's image
 build: $(DOCKER_FILE)
 	$(DOCKER) build -t $(PROJECT_NAME) -f $(DOCKER_FILE) . 2>&1 | tee logs/build.log
