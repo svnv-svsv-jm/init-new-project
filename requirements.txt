@@ -1,9 +1,0 @@
-pytorch-lightning
-pytest
-pytest-cov
-pytest-mypy
-pytest-mypy-plugins
-pytest-pylint
-mypy
-pylint
-black
