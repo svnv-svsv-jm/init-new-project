@@ -13,7 +13,7 @@ USER_ID="${LOCAL_USER_ID:${DEFAULT_ID}}"
 
 echo "USER: $USER -- UID: $USER_ID"
 umask 022
-VENV="/${PROJECT:project}
+VENV=/venv
 ACTIVATE="source $VENV/bin/activate"
 INSTALL_PROJECT="$ACTIVATE && poetry install; $ACTIVATE && python -m pip install -e ."
 

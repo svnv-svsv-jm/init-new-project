@@ -1,2 +1,41 @@
+[tool.poetry]
+name = "project"
+version = "0.0.1"
+description = "Data science template."
+authors = ["Gianmarco <janmail1990@gmail.com>"]
+license = "LICENSE"
+readme = "README.md"
 
+[build-system]
+requires = ["poetry-core>=1.0.0", "cython"]
+build-backend = "poetry.core.masonry.api"
 
+[tool.black]
+line-length = 110
+
+[tool.poetry.dependencies]
+python = ">=3.8,<3.11"
+jupyter = "*"
+jupyterlab_server = "*"
+jupyterlab = "*"
+pyrootutils = "*"
+loguru = "*"
+
+[tool.poetry.dev-dependencies]
+black = { extras = ["jupyter"], version = "*" }
+flake8 = "*"
+ipython = "*"
+isort = "*"
+mypy = "*"
+pylint = "*"
+pytest = "*"
+pytest-cov = "*"
+pytest-mock = "*"
+nbstripout = "*"
+pytest-pylint = "*"
+pytest-mypy = "*"
+pytest-testmon = "*"
+pytest-xdist = "*"
+virtualenv = "*"
+msgpack = "*"
+nbmake = "*"

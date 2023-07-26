@@ -1,15 +1,44 @@
-.venv
-
-checkpoints/*
-tensorboard/*
-logs/*
-*_cache
-*.egg-info
-.vscode
-
 # Garbage
-.Trash-0
+**/*/__pycache__
+**/.vscode
+**/__pycache__
+*.egg-info
 
-# Byte-compiled / optimized / DLL files
-__pycache__/
-*.py[cod]
+# Data
+.data
+
+# PyTest
+.pytest_cache
+.mypy_cache
+.coverage
+.coverage.*
+.testmon*
+pytest_artifacts
+
+# Google
+.gdrive
+
+# Builds and temporary files
+build
+tmp/
+
+# Personal
+notes.txt
+.env
+
+# Checkpoints and logs
+.checkpoints
+lightning_logs*
+logs
+
+# Hydra
+outputs
+
+# Sandbox
+.ipynb_checkpoints
+notebooks/sandbox.ipynb
+notebooks/sandbox
+notebooks/.ipynb_checkpoints/
+notebooks/checkpoints/
+sandbox
+ipython_log.py

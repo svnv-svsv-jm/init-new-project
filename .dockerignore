@@ -1,0 +1,20 @@
+# Ignore everything
+*
+
+# Allow files and directories
+!docker
+!requirements.txt
+!poetry.lock
+!pyproject.toml
+!Makefile
+!scripts
+!README.md
+!LICENSE
+!MANIFEST.in
+!src
+
+# Ignore unnecessary files inside allowed directories: this should go after the allowed directories
+**/*~
+**/*.log
+**/.DS_Store
+**/Thumbs.db

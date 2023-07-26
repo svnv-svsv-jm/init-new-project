@@ -1,0 +1,36 @@
+stages:
+  - build
+  - test
+
+variables:
+  PROJECT_NAME: new-project
+
+# registry should be something like: registry.euranova.eu/rd/bishop
+build:
+  stage: build
+  when: on_success
+  tags:
+    - dind
+  only:
+    - master
+    - main
+  before_script:
+    - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN $CI_REGISTRY
+  script:
+    - docker build -t $CI_REGISTRY_IMAGE/$PROJECT_NAME -f Dockerfile .
+    - docker push $CI_REGISTRY_IMAGE/$PROJECT_NAME:latest
+
+pytest-python-310:
+  stage: test
+  tags:
+    - dind
+  only:
+    - merge_requests
+  before_script:
+    - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN $CI_REGISTRY
+    - docker build -t $CI_REGISTRY_IMAGE/$PROJECT_NAME -f Dockerfile .
+  script:
+    - export LOCAL_USER=$(whoami)
+    - export LOCAL_USER_ID=$(id -u)
+    - export PYTHON=/$PROJECT_NAME/bin/python
+    - docker run --rm --volume ${PWD}:/workdir -e PYTHON -e LOCAL_USER_ID -e LOCAL_USER -t $CI_REGISTRY_IMAGE/$PROJECT_NAME:latest bash scripts/pytest.sh
