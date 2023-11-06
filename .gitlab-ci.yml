@@ -4,8 +4,8 @@ stages:
 
 variables:
   PROJECT_NAME: new-project
+  DOCKERFILE: Dockerfile
 
-# registry should be something like: registry.euranova.eu/rd/bishop
 build:
   stage: build
   when: on_success
@@ -17,20 +17,30 @@ build:
   before_script:
     - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN $CI_REGISTRY
   script:
-    - docker build -t $CI_REGISTRY_IMAGE/$PROJECT_NAME -f Dockerfile .
+    - docker build -t $CI_REGISTRY_IMAGE/$PROJECT_NAME --build-arg project_name=$PROJECT_NAME -f $DOCKERFILE .
     - docker push $CI_REGISTRY_IMAGE/$PROJECT_NAME:latest
 
-pytest-python-310:
+pytest-docker:
   stage: test
   tags:
     - dind
   only:
     - merge_requests
   before_script:
-    - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN $CI_REGISTRY
-    - docker build -t $CI_REGISTRY_IMAGE/$PROJECT_NAME -f Dockerfile .
+    - docker build -t $CI_REGISTRY_IMAGE/$PROJECT_NAME --build-arg project_name=$PROJECT_NAME -f $DOCKERFILE .
   script:
     - export LOCAL_USER=$(whoami)
     - export LOCAL_USER_ID=$(id -u)
     - export PYTHON=/$PROJECT_NAME/bin/python
     - docker run --rm --volume ${PWD}:/workdir -e PYTHON -e LOCAL_USER_ID -e LOCAL_USER -t $CI_REGISTRY_IMAGE/$PROJECT_NAME:latest bash scripts/pytest.sh
+
+pytest:
+  image: python:3.10.10
+  stage: test
+  only:
+    - merge_requests
+  before_script:
+    - bash scripts/docker-installation-steps.sh
+    - export PYTHON=/$PROJECT_NAME/bin/python
+  script:
+    - make pytest
