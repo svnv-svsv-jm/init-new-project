@@ -5,21 +5,20 @@ description = "Data science template."
 authors = ["Gianmarco <janmail1990@gmail.com>"]
 license = "LICENSE"
 readme = "README.md"
+include = ["*.py", "src/**/*.json", "src/**/*.toml"]
+exclude = ["test/*"]
 
 [build-system]
 requires = ["poetry-core>=1.0.0", "cython"]
 build-backend = "poetry.core.masonry.api"
 
-[tool.black]
-line-length = 110
-
 [tool.poetry.dependencies]
 python = ">=3.8,<3.11"
+pyrootutils = "*"
+loguru = "*"
 jupyter = "*"
 jupyterlab_server = "*"
 jupyterlab = "*"
-pyrootutils = "*"
-loguru = "*"
 
 [tool.poetry.dev-dependencies]
 black = { extras = ["jupyter"], version = "*" }
@@ -31,11 +30,31 @@ pylint = "*"
 pytest = "*"
 pytest-cov = "*"
 pytest-mock = "*"
-nbstripout = "*"
 pytest-pylint = "*"
 pytest-mypy = "*"
 pytest-testmon = "*"
 pytest-xdist = "*"
-virtualenv = "*"
-msgpack = "*"
 nbmake = "*"
+
+[tool.black]
+line-length = 110
+
+[tool.mypy]
+exclude = ["test/conftest.py"]
+warn_return_any = true
+warn_unused_configs = true
+mypy_path = ["src"]
+disallow_untyped_calls = true
+disallow_untyped_defs = true
+disallow_incomplete_defs = true
+check_untyped_defs = true
+ignore_errors = false
+ignore_missing_imports = true
+no_implicit_optional = false
+
+[tool.pytest.ini_options]
+minversion = "6.0"
+norecursedirs = ["test/res"]
+testpaths = ["test"]
+log_cli = true
+addopts = "-x --pylint --disable-pytest-warnings --cov=src/ --durations=5"

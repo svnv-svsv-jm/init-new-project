@@ -8,13 +8,13 @@ We usually prefer [Visual Studio Code](https://code.visualstudio.com/). If you a
 
 ```json
 {
-    "python.defaultInterpreterPath": "<path-to-your-python-interpreter>",
-    "python.linting.enabled": true,
-    "python.linting.mypyEnabled": true,
-    "python.linting.lintOnSave": true,
-    "python.linting.pylintEnabled": true,
-    "python.formatting.provider": "black",
-    "esbonio.sphinx.confDir": "",
+  "python.defaultInterpreterPath": "<path-to-your-python-interpreter>",
+  "python.linting.enabled": true,
+  "python.linting.mypyEnabled": true,
+  "python.linting.lintOnSave": true,
+  "python.linting.pylintEnabled": true,
+  "python.formatting.provider": "black",
+  "esbonio.sphinx.confDir": ""
 }
 ```
 
@@ -28,15 +28,11 @@ pip install black
 
 ## Technologies
 
-* This projct uses `make` commands to facilitate users and developers.
+- This projct uses `make` commands to facilitate users and developers.
 
-* This project contains a working Docker image. You can build and develop in a container running this image if you experience problems in simply installing this project in a virtual environment. You can launch a development container by running `make dev-container`. Check [here](https://code.visualstudio.com/docs/remote/create-dev-container) why you'd like to do this.
+- This project contains a working Docker image. You can build and develop in a container running this image if you experience problems in simply installing this project in a virtual environment. You can launch a development container by running `make dev-container`. Check [here](https://code.visualstudio.com/docs/remote/create-dev-container) why you'd like to do this.
 
-* We use [pytest](https://docs.pytest.org/en/7.1.x/) with the following plugins: [pylint](https://pylint.pycqa.org/en/latest/) and [mypy](http://www.mypy-lang.org/). [Coverage](https://coverage.readthedocs.io/en/6.4.4/) is also enforced.
-
-* The project is currently based on [PyTorch Lightning](https://pytorch-lightning.readthedocs.io/en/latest/).
-
-* For reproducibility of experiments, we are planning to use a combination of [Hydra](https://hydra.cc/) and [PyTorch Lightning](https://pytorch-lightning.readthedocs.io/en/latest/). Check out [this repository](https://github.com/ashleve/lightning-hydra-template) for an example.
+- We use [pytest](https://docs.pytest.org/en/7.1.x/) with the following plugins: [pylint](https://pylint.pycqa.org/en/latest/) and [mypy](http://www.mypy-lang.org/). [Coverage](https://coverage.readthedocs.io/en/6.4.4/) is also enforced.
 
 ## Project's layout
 
@@ -109,7 +105,7 @@ python -m pytest
 pytest --nbmake --overwrite "./notebooks
 ```
 
-`pylint`, `mypy` and `coverage` are enforced automatically.
+`pylint`, `mypy` and `coverage` may be enforced automatically.
 
 You can also just run:
 
@@ -146,16 +142,15 @@ We build the image locally (`make build`), push it (`make push`) and then let th
 
 ## Development rules
 
-* Issues must have a small scope and must have a clear definition for when they can be considered solved (definition of "done").
-* Notebooks must be small, readable and tested. Always go for an easy user interface / API. For example, `from <package-name> import ...` is preferable than slapping a user with hundreds of lines to show them how to do stuff.
-* Workflow:
-    * create an issue
-    * create associated branch
-    * code around: define tests (source code and notebooks) and pass them locally (see above how to run tests)
-    * MR: the CI/CD pipeline runs all tests
-    * review
-    * squash commits, merge and delete branch
-    * no merge must be possible if the pipeline does not succeed!
+- Issues must have a small scope and must have a clear definition for when they can be considered solved (definition of "done").
+- Notebooks must be small, readable and tested. Always go for an easy user interface / API. For example, `from <package-name> import ...` is preferable than slapping a user with hundreds of lines to show them how to do stuff.
+- Workflow:
+  - create an issue
+  - create associated branch
+  - code around: define tests (source code and notebooks) and pass them locally (see above how to run tests)
+  - MR: the CI/CD pipeline runs all tests
+  - review
+  - squash commits, merge and delete branch
+  - no merge must be possible if the pipeline does not succeed!
 
-> **Emtpy lines**: as you may notice, there are no empty lines in our source code, unless to separate methods, functions, imports, etc. Our philosophy is: if you need an empty line to separate pieces of code, why not fill that line with a nice comment that explains the code? Please consider commenting rather than leaving empty lines.
 > **DATA**: all datasets must be saved to the `.data`. This folder is ignored by Git (see the `.gitignore` [file](../.gitignore)). If you do not like this default location, you can store datasets elsewhere, as long as you do not push data to the repository to keep its size small.

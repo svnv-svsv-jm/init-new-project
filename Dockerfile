@@ -10,7 +10,6 @@ COPY Makefile /workdir/Makefile
 COPY scripts /workdir/scripts
 COPY README.md /workdir/README.md
 COPY LICENSE /workdir/LICENSE
-COPY MANIFEST.in /workdir/MANIFEST.in
 COPY src /workdir/src
 COPY poetry.lock /workdir/
 
@@ -19,7 +18,8 @@ SHELL ["/bin/bash", "-c"]
 WORKDIR /workdir
 
 # Install project
-RUN bash scripts/docker-installation-steps.sh
+RUN bash scripts/install-system-packages.sh && \
+    bash scripts/setup-virtualenv.sh
 
 # TensorBoard
 EXPOSE 6006
