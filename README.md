@@ -8,6 +8,8 @@ A `.env` file lets you choose the project's name, the Python version and more st
 
 This template is to develop a PyTorch project, but you can change it to whatever you want.
 
+It is implied that you are on Mac/Linux. No Windows.
+
 ## Installation via virtual environment
 
 ### Pre-requisites
@@ -36,26 +38,25 @@ or just:
 make init
 ```
 
-#### Requirements
+### Getting Started
 
-Once the virtual environment is active, install all dependencies by running:
+Once the virtual environment is active, install the present project and all dependencies by running:
+
+```bash
+pip install --upgrade pip
+pip install --upgrade poetry
+poetry install --no-cache
+```
+
+Make sure you are calling the correct `python`, `pip` and `poetry`. In case you're not sure, prepend `python -m` before all above commands.
+
+Alternatively, you can also just run:
 
 ```bash
 make install
 ```
 
-For this command to work, you have to make sure that the `python` command resolves to the correct virtual environment (the one you just created).
-
-### Getting Started
-
-Install the present project by running:
-
-```bash
-# install in dev mode so you can also mess around
-pip install -e .
-```
-
-This command should not be necessary if you ran `make install`.
+which does all the work for you.
 
 ## Installation via Docker
 
@@ -71,11 +72,11 @@ The present folder will be mounted at `/workdir`.
 
 ### More docker-related features
 
-* To start a Bash session in the container, run: `make bash`
-* To start a Jupyter Notebook (+ a Tensorboard), run: `make up`. Then run `make down` when you're done.
-* To run PyTest from the container, run: `make pytest-image`
-* To start a Python session in the container, run: `make docker-python`
-* To start a [development container](https://code.visualstudio.com/docs/remote/create-dev-container), run: `make dev-container` or `make up` (if you go for this one, you can then kill the container with `make down`). Make sure that you're not `root` in the container. To see if a user with your local username and userid exists inside the container, run `cat /etc/passwd`. Then, you can run `su - <your-username>` to change user insinde the dev container.
+- To start a Bash session in the container, run: `make bash`
+- To start a Jupyter Notebook (+ a Tensorboard), run: `make up`. Then run `make down` when you're done.
+- To run PyTest from the container, run: `make pytest-image`
+- To start a Python session in the container, run: `make docker-python`
+- To start a [development container](https://code.visualstudio.com/docs/remote/create-dev-container), run: `make dev-container` or `make up` (if you go for this one, you can then kill the container with `make down`). Make sure that you're not `root` in the container. To see if a user with your local username and userid exists inside the container, run `cat /etc/passwd`. Then, you can run `su - <your-username>` to change user insinde the dev container.
 
 Please also note that our image's entrypoint is the script [entrypoint.sh](./scripts/entrypoint.sh). This script solves common permission problems for developers who wish to mount their local source code directory on a container, as explained [here](https://denibertovic.com/posts/handling-permissions-with-docker-volumes/). **TL;DR**: you will be logged into your container as your current user, thus avoinding any permission errors.
 

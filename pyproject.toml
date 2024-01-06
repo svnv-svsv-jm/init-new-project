@@ -5,6 +5,7 @@ description = "Data science template."
 authors = ["Gianmarco <janmail1990@gmail.com>"]
 license = "LICENSE"
 readme = "README.md"
+packages = [{ include = "package", from = "src" }]
 include = ["*.py", "src/**/*.json", "src/**/*.toml"]
 exclude = ["test/*"]
 

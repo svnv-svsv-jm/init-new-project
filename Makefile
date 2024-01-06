@@ -79,17 +79,14 @@ git-squash:
 # docker
 # -----------
 # build project's image
-build: DOCKER_HOST= 
 build:
 	$(BUILD_CMD)
 
-build-nohup: DOCKER_HOST= 
 build-nohup:
 	mkdir -p logs || echo "Folder already exists."
 	nohup $(BUILD_CMD) 2>&1 > logs/build-$(shell echo "$(DOCKERFILE)" | tr "/" "-").log &
 
 # launch bash session within a container
-bash: DOCKER_HOST= 
 bash:
 	$(DOCKER) run --rm -it $(DOCKER_COMMON_FLAGS) \
 		--name $(PROJECT_NAME)-bash \
@@ -113,11 +110,9 @@ run:
 		$(CMD)
 
 # clean dangling images
-clean: DOCKER_HOST= 
 clean:
 	$(DOCKER) system prune
 
 # WARNING: cleans everything, even images you may want to keep
-clean-all: DOCKER_HOST= 
 clean-all:
 	$(DOCKER) rmi $(docker images -f dangling=true -q)
