@@ -1,4 +1,3 @@
-# pylint: disable=no-member
 import pytest
 from loguru import logger
 import sys
