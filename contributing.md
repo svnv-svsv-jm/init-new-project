@@ -1,6 +1,6 @@
 # Developer guide
 
-This document is intended for developers who wish to contribute to the project. For all dependencies, see the [installation guide](../README.md).
+This document is intended for developers who wish to contribute to the project. For all dependencies, see the [installation guide](./README.md).
 
 ## Tools
 
@@ -18,7 +18,7 @@ We usually prefer [Visual Studio Code](https://code.visualstudio.com/). If you a
 }
 ```
 
-You can have [Black](https://black.readthedocs.io/en/stable/) installed by following the [installation guide](../README.md) or you can do so manually as follows:
+You can have [Black](https://black.readthedocs.io/en/stable/) installed by following the [installation guide](./README.md) or you can do so manually as follows:
 
 ```bash
 pip install black
@@ -153,4 +153,4 @@ We build the image locally (`make build`), push it (`make push`) and then let th
   - squash commits, merge and delete branch
   - no merge must be possible if the pipeline does not succeed!
 
-> **DATA**: all datasets must be saved to the `.data`. This folder is ignored by Git (see the `.gitignore` [file](../.gitignore)). If you do not like this default location, you can store datasets elsewhere, as long as you do not push data to the repository to keep its size small.
+> **DATA**: all datasets must be saved to the `.data`. This folder is ignored by Git (see the `.gitignore` [file](./.gitignore)). If you do not like this default location, you can store datasets elsewhere, as long as you do not push data to the repository to keep its size small.

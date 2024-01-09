@@ -90,4 +90,4 @@ Check the `experiments` folder: [readme](experiments/README.md)
 
 ## Developer documentation
 
-If you wish to contribute to the project, please see [here](./src/README.md)
+If you wish to contribute to the project, please see [here](./contributing.md)
