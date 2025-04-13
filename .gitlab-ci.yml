@@ -1,0 +1,115 @@
+stages:
+  - build
+  - test
+  - deploy
+
+variables:
+  PROJECT_NAME: svsv
+  PACKAGE_NAME: svsv
+  DOCKERFILE: Dockerfile
+
+include:
+  - local: ".gitlab/ci/templates/.test.yml"
+
+
+# -----------
+# Testing
+# -----------
+tests:
+  parallel:
+    matrix:
+      - RECIPE: ["black", "pylint", "unit-test", "integ-test", "mypy", "nb-test"]
+        IMAGE: ["python:3.10", "python:3.11", "python:3.12"]
+  extends: .test
+  only:
+    refs:
+      - merge_requests
+  stage: test
+  variables:
+    CMD: just $RECIPE
+
+
+# -----------
+# Release
+# -----------
+# The idea is that every time we push to master, we are going to:
+# - build the wheel
+# - pass a TAG to the `release-job` via "reports.dotenv: variables.env"
+# - the wheel is pushed to Nexus only if on master/main
+# - a new release is then create by the `release-job`
+
+# So the idea is that, automatically, when we update master create create a new release and push a new wheel to Nexus.
+
+# Build the wheel and pass the current package version to the release job
+# The wheel is pushed to Nexus only if we are on main/master
+wheel:
+  image: python:3.12
+  stage: build
+  only:
+    - master
+    - tags
+  script:
+    - bash scripts/install-system-packages.sh
+    - bash scripts/setup-virtualenv.sh
+    - PACKAGE_VERSION=$(uv run python -c "import $PACKAGE_NAME; print($PACKAGE_NAME.__version__)")
+    - echo "PACKAGE_VERSION=$PACKAGE_VERSION" >> variables.env
+    - echo "TAG=$PACKAGE_VERSION" >> variables.env
+    - uv build
+    - |
+      if [ -n "$CI_COMMIT_TAG" ]; then
+        echo "Uploading to: ${NEXUS_REPOSITORY}";
+        uv publish --index ird --username ${NEXUS_USERNAME} --password ${NEXUS_PASSWORD}
+      else
+        echo "Not uploading, branch is: $CI_COMMIT_BRANCH"
+      fi
+    - cat variables.env
+  artifacts:
+    expire_in: 1 week
+    paths:
+      - dist/*.whl
+    # Use artifacts:reports:dotenv to expose the variables to other jobs
+    reports:
+      dotenv: variables.env
+
+# Creates a release, with the current package version from the wheel job
+release-job:
+  image: registry.gitlab.com/gitlab-org/release-cli:latest
+  stage: deploy
+  dependencies:
+    - wheel
+  needs: # to get the package version
+    - job: wheel
+      artifacts: true
+  only:
+    - master # only execute the release if the pipeline runs for the master branch
+  script:
+    - echo "Package version $PACKAGE_VERSION"
+    - echo "Tag $TAG"
+  release:
+    name: "Release $TAG"
+    description: "Created using the release-cli"
+    tag_name: "$TAG"
+    ref: "$CI_COMMIT_SHA"
+
+
+
+# --------------------------------
+# Documentaion
+# --------------------------------
+pages:
+  stage: deploy
+  image: python:3.12
+  only:
+    - master
+  before_script:
+    - python -m pip install --upgrade pip
+    - python -m pip install sphinx furo pyrootutils
+  script:
+    - sphinx-apidoc -f -o docs/source . --separate --module-first --implicit-namespaces
+    - cd docs && just clean && just html
+    - cd ..
+    - mkdir -p ./public  # Use a relative path to create the public directory
+    - mv docs/build/html/* ./public
+  artifacts:
+    paths:
+      - ./public  # Ensure the artifacts path matches the output directory

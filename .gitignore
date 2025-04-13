@@ -1,0 +1,52 @@
+# Garbage
+**/*/__pycache__
+**/.vscode
+**/__pycache__
+*.egg-info
+.coverage
+.coverage *
+.vscode
+
+# Builds
+dist/
+build/
+
+# Data
+.data
+
+# PyTest
+.pytest_cache
+.mypy_cache
+.coverage
+.coverage.*
+.testmon*
+pytest_artifacts
+pytest-artifacts
+
+# Google
+.gdrive
+
+# Builds and temporary files
+build
+tmp/
+
+# Personal
+notes.txt
+.env
+
+# Checkpoints and logs
+.checkpoints
+lightning_logs
+logs
+
+# Hydra
+outputs
+
+# Sandbox
+.ipynb_checkpoints
+notebooks/sandbox.ipynb
+notebooks/sandbox
+notebooks/.ipynb_checkpoints/
+notebooks/checkpoints/
+sandbox
+ipython_log.py

@@ -1,0 +1,27 @@
+.test:
+  image: $IMAGE
+  allow_failure: false
+  interruptible: true
+  only:
+    refs:
+      - merge_requests
+  stage: test
+  variables:
+    COMMAND: $CMD
+  before_script:
+    - mkdir -p ~/.aws
+    - cp -r ecoplant/config ~/.aws/.
+    - cp ./scripts/credentials.sh /tmp/credentials.sh
+    - bash scripts/install-system-packages.sh
+    - pip install --upgrade pip
+    - pip install uv
+    - just install
+    - uv run python -c "import $PACKAGE_NAME; print($PACKAGE_NAME.__version__)" || echo "Problem in printing package information."
+  script:
+    - $COMMAND
+  coverage: '/(?i)total.*? (100(?:\.0+)?\%|[1-9]?\d(?:\.\d+)?\%)$/'
+  artifacts:
+    expire_in: 80 mins
+    reports:
+      junit:
+        - pytest-results.xml

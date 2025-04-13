@@ -1,0 +1,36 @@
+name: Test and update master
+
+on:
+  push:
+    branches: ["main"]
+
+jobs:
+  release:
+    runs-on: "ubuntu-latest"
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Set up Python 3.12
+        uses: actions/setup-python@v3
+        with:
+          python-version: "3.12"
+
+      - name: Get project name and version from pyproject.toml
+        id: get_name
+        run: |
+          bash scripts/install-system-packages.sh
+          bash scripts/setup-virtualenv.sh
+          PACKAGE_NAME=$(python -c 'import toml; print(toml.load("pyproject.toml")["project"]["name"])')
+          echo "NAME=$PACKAGE_NAME" >> $GITHUB_ENV
+          PACKAGE_VERSION=$(uv run python -c "import $PACKAGE_NAME; print($PACKAGE_NAME.__version__)")
+          echo "VERSION=$PACKAGE_VERSION" >> $GITHUB_ENV
+
+      - name: Create GitHub Release
+        uses: actions/create-release@v1
+        with:
+          tag_name: ${{ env.VERSION }}
+          release_name: ${{ env.VERSION }}
+          draft: false
+          prerelease: false
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
